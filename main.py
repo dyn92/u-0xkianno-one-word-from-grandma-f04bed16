@@ -18,6 +18,11 @@ WORD = "robit"
 
 
 def main() -> int:
+    # Guard the gate before writing: exactly one word, 1-30 chars,
+    # UTF-8, not only whitespace. Fail loudly instead of shipping
+    # an entry the scorer would mark invalid.
+    if not WORD or len(WORD) > 30 or not WORD.strip() or " " in WORD:
+        raise ValueError("entry word fails the 1-30 character gate")
     out_dir = os.environ.get("MAKEFUN_OUTPUT_DIR", "/output")
     os.makedirs(out_dir, exist_ok=True)
     path = os.path.join(out_dir, "entry.txt")
